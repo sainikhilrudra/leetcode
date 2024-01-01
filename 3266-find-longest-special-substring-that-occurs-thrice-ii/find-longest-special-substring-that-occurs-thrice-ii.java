@@ -1,41 +1,49 @@
 class Solution {
-    
-    static boolean isMidValid(char[] ch, int n, int k) {
-        int i=0, j=0, unique = 0;
-        int cnt[] = new int[26];
-        int f[] = new int[26];
-        while(j < n) {
-            cnt[ch[j] - 'a']++;
-            if(cnt[ch[j] - 'a'] == 1) unique++;
-            if(j-i+1 == k) {
-                if(unique == 1) {
-                    f[ch[j] - 'a']++;
-                    if(f[ch[j] - 'a'] >= 3) {
+
+    static boolean isMidValid(char[] s, int n, int k) {
+        for (char ch = 'a'; ch <= 'z'; ch++) {
+            int i = 0, j = 0, cnt = 0, f = 0;
+
+            while (j < n) {
+                if (s[j] == ch) {
+                    cnt++;
+                }
+
+                if (j - i + 1 < k) {
+                    j++;
+                } else {
+                    if (cnt == k) {
+                        f++;
+                    }
+
+                    if (f >= 3) {
                         return true;
                     }
+
+                    if (s[i] == ch) {
+                        cnt--;
+                    }
+
+                    i++;
+                    j++;
                 }
-            cnt[ch[i] - 'a']--;
-            if(cnt[ch[i] - 'a'] == 0) unique--; 
-            i++;
             }
-            j++;
         }
         return false;
     }
-    
+
     public int maximumLength(String s) {
-        
+        int n = s.length();
         char[] ch = s.toCharArray();
-        int n = ch.length;
-        int ans = -1;
-        int low = 1, high = n-2;
-        while(low <= high) {
-            int mid = low + (high - low)/2;
-            if(isMidValid(ch, n, mid)) {
+        int low = 1, high = n - 2, ans = -1;
+
+        while (low <= high) {
+            int mid = low + (high - low) / 2;
+            
+            if (isMidValid(ch, n, mid)) {
                 ans = mid;
                 low = mid + 1;
-            }
-            else {
+            } else {
                 high = mid - 1;
             }
         }
